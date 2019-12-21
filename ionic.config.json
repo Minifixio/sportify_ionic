@@ -1,0 +1,7 @@
+{
+  "name": "sportify_ionic",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
