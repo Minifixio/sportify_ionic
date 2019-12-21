@@ -11,7 +11,7 @@ export class SpotifyApiService {
   config = Constants.config;
   clientId = Constants.clientId;
   clientSecret = Constants.clientSecret;
-  
+
   authToken: any;
 
   constructor(

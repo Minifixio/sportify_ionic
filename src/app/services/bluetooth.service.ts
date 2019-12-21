@@ -35,7 +35,7 @@ export class BluetoothService {
       }
 
       try {
-        const result = this.bleSerial.discoverUnpaired();
+        const result = await this.bleSerial.discoverUnpaired();
         console.log(result);
         resolve(result);
       } catch {

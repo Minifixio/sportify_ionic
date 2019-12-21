@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BluetoothService } from '../services/bluetooth.service';
 import { HomePage } from '../home/home.page';
+import { Events } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,11 +14,11 @@ export class BluetoothComponent implements OnInit {
   deviceList: Promise<Array<object>>;
   loading: boolean;
   empty: boolean;
-  pulse: number;
+  pulse = new Observable();
 
   constructor(
     private bleService: BluetoothService,
-    private homePage: HomePage
+    private events: Events
   ) { }
 
   ngOnInit() {
@@ -37,27 +38,13 @@ export class BluetoothComponent implements OnInit {
     });
   }
 
-  bytesToString(buffer) {
-    return Number(String.fromCharCode.apply(null, new Uint8Array(buffer)));
+  async connect(id) {
+    await this.bleService.connect(id).subscribe(
+      succes => this.events.publish('device:connected', this.bleService.subscribeToData(id))
+    );
   }
 
-  connect(id) {
-    this.bleService.connect(id).subscribe(
-      connected => {
-        console.log('Device is conected :');
-        console.log(connected);
-        this.bleService.subscribeToData(connected.id).subscribe(
-          data => this.homePage.bpmGauge.gaugeValue = data,
-          error => console.log(error)
-        );
-
-        this.homePage.displayBleList = false;
-        this.homePage.displayGauge = true;
-      },
-
-      disconnected => {
-        console.log('Device disconnected');
-      }
-    );
+  getPulse() {
+    return this.pulse;
   }
 }

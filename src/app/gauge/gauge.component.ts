@@ -15,6 +15,8 @@ export class GaugeComponent implements OnInit {
   gaugeForegroundColor = 'rgb(30, 215, 96)';
   gaugeBackgroundColor = 'rgb(90, 90, 90)';
 
+  displayGauge: boolean;
+
   constructor() { }
 
   ngOnInit() {}

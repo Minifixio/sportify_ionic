@@ -1,9 +1,9 @@
 <ion-content id='dark-page'>
-  <div *ngIf='displayGauge' id="gaugeDiv">
+  <div id="gaugeDiv">
     <app-gauge #bpmGauge></app-gauge>
   </div>
 
   <div *ngIf='displayBleList' id="bleListDiv">
       <app-bluetooth #bleList></app-bluetooth>
-  </div*ngIf='displayGauge'>
+  </div>
 </ion-content>

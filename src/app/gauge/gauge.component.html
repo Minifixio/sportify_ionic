@@ -1,5 +1,6 @@
 
-<ngx-gauge [type]="gaugeType" 
+<ngx-gauge *ngIf="displayGauge"
+  [type]="gaugeType" 
   [value]="gaugeValue" 
   [thick]="gaugeThick"
   [cap]="gaugeCap"

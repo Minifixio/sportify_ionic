@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { HttpClientModule } from '@angular/common/http';
+import { BluetoothComponent } from './bluetooth/bluetooth.component';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { BLE } from '@ionic-native/ble/ngx';
 

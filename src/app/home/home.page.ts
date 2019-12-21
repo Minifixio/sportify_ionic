@@ -4,6 +4,7 @@ import { GaugeComponent } from '../gauge/gauge.component';
 import { BluetoothComponent } from '../bluetooth/bluetooth.component';
 import { BluetoothService } from '../services/bluetooth.service';
 import { Observable } from 'rxjs';
+import { Events } from '@ionic/angular';
 
 declare var cordova;
 
@@ -22,19 +23,33 @@ export class HomePage implements OnInit {
 
   displayGauge: boolean;
   displayBleList: boolean;
-  gaugeValue: Observable<any>;
 
   constructor(
     private spotifyApi: SpotifyApiService,
     private bleService: BluetoothService,
-    private bleComponent: BluetoothComponent) {
-      this.bpmGauge.gaugeValue = 0;
+    private events: Events) {
   }
 
   ngOnInit() {
-    this.displayGauge = false;
+    this.bpmGauge.displayGauge = false;
     this.displayBleList = true;
   }
 
-  recordBpm(connection: Observable<any>) {}
+  ionViewDidEnter() {
+    this.events.subscribe('device:connected', result => {
+      this.displayBleList = false;
+      this.bpmGauge.displayGauge = true;
+      this.bpmGauge.gaugeValue = 20;
+      result.subscribe(
+        data => {
+          console.log(this.bytesToString(data));
+          this.bpmGauge.gaugeValue = this.bytesToString(data);
+        }
+      );
+    });
+  }
+
+  bytesToString(buffer) {
+    return Number(String.fromCharCode.apply(null, new Uint8Array(buffer)));
+  }
 }
