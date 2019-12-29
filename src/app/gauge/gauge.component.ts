@@ -9,13 +9,12 @@ export class GaugeComponent implements OnInit {
 
   gaugeType = 'full';
   gaugeValue = 50;
+  gaugeLabel = 'BPM';
   gaugeThick = '20';
   gaugeCap = 'round';
-  gaugeSize = 400;
+  gaugeSize = 360;
   gaugeForegroundColor = 'rgb(30, 215, 96)';
   gaugeBackgroundColor = 'rgb(90, 90, 90)';
-
-  displayGauge: boolean;
 
   constructor() { }
 

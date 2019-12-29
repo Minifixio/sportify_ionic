@@ -13,6 +13,8 @@ export class SpotifyComponent implements OnInit {
   config = Constants.config;
   clientId = Constants.clientId;
   clientSecret = Constants.clientSecret;
+
+  playerPaused = false;
   
   authToken: any;
 

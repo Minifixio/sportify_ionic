@@ -2,8 +2,12 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: 'bluetooth-list', pathMatch: 'full' },
   { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},
+  {
+    path: 'bluetooth-list',
+    loadChildren: () => import('./bluetooth-list/bluetooth-list.module').then( m => m.BluetoothListPageModule)
+  },
 ];
 
 @NgModule({

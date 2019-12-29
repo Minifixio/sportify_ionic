@@ -8,6 +8,7 @@ import { NgxGaugeModule } from 'ngx-gauge';
 import { HomePage } from './home.page';
 
 import { GaugeComponent } from '../gauge/gauge.component';
+import { SpotifyComponent } from '../spotify/spotify.component';
 import { BluetoothComponent } from '../bluetooth/bluetooth.component';
 
 @NgModule({
@@ -23,6 +24,6 @@ import { BluetoothComponent } from '../bluetooth/bluetooth.component';
       }
     ])
   ],
-  declarations: [HomePage, GaugeComponent, BluetoothComponent]
+  declarations: [HomePage, GaugeComponent, BluetoothComponent, SpotifyComponent] 
 })
 export class HomePageModule {}

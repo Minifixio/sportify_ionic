@@ -1,0 +1,22 @@
+#bleCard {
+    --background: white;
+    border-radius: 20px;
+    margin-top: 200px;
+    margin-left: 15px;
+    margin-right: 15px;
+    box-shadow: 0px 10px 13px -7px rgb(30, 215, 96)
+}
+
+#loadingSpinner {
+    display: block;
+    margin: auto;
+}
+
+#refreshButton {
+    --background: rgb(30, 215, 96);
+    --background-hover: rgb(30, 215, 96);
+}
+
+#dark-page{
+    --background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(88,88,93,1) 220%);
+}

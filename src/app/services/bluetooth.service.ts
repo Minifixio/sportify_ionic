@@ -15,6 +15,8 @@ export class BluetoothService {
     rxCharacteristic: '6e400003-b5a3-f393-e0a9-e50e24dcca9e'
   };
 
+  selectedDevice: Observable<any>;
+
   constructor(
     private bleSerial: BluetoothSerial,
     private alertController: AlertController,
@@ -48,8 +50,8 @@ export class BluetoothService {
     return this.bleCentral.connect(id);
   }
 
-  subscribeToData(id): Observable<any> {
-    return this.bleCentral.startNotification(id, this.bluefruit.serviceUUID, this.bluefruit.rxCharacteristic);
+  subscribeToData(id) {
+    this.selectedDevice = this.bleCentral.startNotification(id, this.bluefruit.serviceUUID, this.bluefruit.rxCharacteristic);
   }
 
   checkConnection(id): Promise<any> {
@@ -73,4 +75,7 @@ export class BluetoothService {
     await alert.present();
   }
 
+  getSelectedDevice() {
+    return this.selectedDevice;
+  }
 }

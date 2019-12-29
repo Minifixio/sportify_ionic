@@ -1,14 +1,19 @@
 
-<ngx-gauge *ngIf="displayGauge"
+<ngx-gauge
   [type]="gaugeType" 
   [value]="gaugeValue" 
+  [label]="gaugeLabel"
   [thick]="gaugeThick"
   [cap]="gaugeCap"
   [size]="gaugeSize"
   [foregroundColor]="gaugeForegroundColor"
   [backgroundColor]="gaugeBackgroundColor">
-  <ngx-gauge-value id="gaugeText">
+  <ngx-gauge-value id="gaugeValue">
     {{ gaugeValue }}
   </ngx-gauge-value>
+
+  <ngx-gauge-label id="gaugeLabel">
+    {{ gaugeLabel }}
+  </ngx-gauge-label>
 </ngx-gauge>
 

@@ -1,29 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { BluetoothService } from '../services/bluetooth.service';
-import { HomePage } from '../home/home.page';
-import { Events } from '@ionic/angular';
+import { Events, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-bluetooth',
-  templateUrl: './bluetooth.component.html',
-  styleUrls: ['./bluetooth.component.scss'],
+  selector: 'app-bluetooth-list',
+  templateUrl: './bluetooth-list.page.html',
+  styleUrls: ['./bluetooth-list.page.scss'],
 })
-export class BluetoothComponent implements OnInit {
+export class BluetoothListPage implements OnInit {
 
   deviceList: Promise<Array<object>>;
   loading: boolean;
   empty: boolean;
   pulse = new Observable();
-  displayList: boolean;
 
   constructor(
     private bleService: BluetoothService,
     private events: Events,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
-    this.refreshList();
+    if(window.cordova) {
+      this.refreshList();
+    }
   }
 
   async refreshList() {
@@ -41,19 +42,15 @@ export class BluetoothComponent implements OnInit {
 
   async connect(id) {
     await this.bleService.connect(id).subscribe(
-      succes => this.events.publish('device:connected', this.bleService.subscribeToData(id))
+      succes => {
+        this.events.publish('device:connected', this.bleService.subscribeToData(id));
+        this.navCtrl.navigateForward('/home');
+      }
     );
   }
 
-  getPulse() {
-    return this.pulse;
-  }
-
-  showList() {
-    this.displayList = true;
-  }
-
-  hideList() {
-    this.displayList = true;
+  test() {
+    console.log('Bluetoothlsit-page: TEST');
+    this.events.publish('device:connected', new Observable());
   }
 }
