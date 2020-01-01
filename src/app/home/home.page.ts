@@ -57,4 +57,8 @@ export class HomePage implements OnInit {
         this.bpmGauge.gaugeValue = this.bytesToString(buffer);
     });
   }
+
+  goToPlaylists() {
+    this.navCtrl.navigateBack('/playlists', {animated: false});
+  }
 }

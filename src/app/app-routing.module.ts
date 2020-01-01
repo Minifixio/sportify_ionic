@@ -8,6 +8,10 @@ const routes: Routes = [
     path: 'bluetooth-list',
     loadChildren: () => import('./bluetooth-list/bluetooth-list.module').then( m => m.BluetoothListPageModule)
   },
+  {
+    path: 'playlists',
+    loadChildren: () => import('./playlists/playlists.module').then( m => m.PlaylistsPageModule)
+  },
 ];
 
 @NgModule({

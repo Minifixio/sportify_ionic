@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Constants } from '../services/constants';
+import { SpotifyApiService } from '../services/spotify-api.service';
 declare var cordova;
 
 @Component({
@@ -19,14 +20,17 @@ export class SpotifyComponent implements OnInit {
   authToken: any;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private spotifyApi: SpotifyApiService
   ) {}
 
   ngOnInit() {
     if (window.cordova) {
       this.initConnect();
     } else {
-      this.getAuth();
+      this.spotifyApi.getAuth().then(() => {
+        this.spotifyApi.getPlaylist('5vtC6KRy8zMVfQ6iixIyIW');
+      });
     }
   }
 
@@ -42,27 +46,17 @@ export class SpotifyComponent implements OnInit {
 
   getAuth() {
     const headers = new HttpHeaders();
-    headers.append('Authorization', 'Basic ' + btoa(this.clientId + ':' + this.clientSecret));
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + btoa(this.clientId + ':' + this.clientSecret)
+      })
+    };
 
-    const params = new HttpParams();
-    params.set('grant_type', 'client_credentials');
-    const body = params.toString();
+    const params = new HttpParams().set('grant_type', 'client_credentials');
 
-    this.http.post('https://accounts.spotify.com/api/token', body, { headers : headers}).subscribe(
+    this.http.post('https://accounts.spotify.com/api/token', params.toString(), httpOptions).subscribe(
       result => console.log(result)
     );
-  }
-
-  async getPlaylist(id: string) {
-    let headers =  new Headers();
-    headers.append('Authorization', 'Bearer ' + this.authToken);
-
-    const playlistUrl = 'https://api.spotify.com/v1/playlists/' + id + '/tracks';
-
-    const result = await this.http.post(playlistUrl, { headers : headers });
-
-    console.log(result);
-
   }
 }

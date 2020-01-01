@@ -28,34 +28,32 @@ export class SpotifyApiService {
     });
   }
 
-  getAuth() {
-    const headers = new HttpHeaders();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-type': 'application/json',
-        'Access-Control-Allow-Origin':  '*',
-        'Authorization': 'Basic' + btoa(this.clientId + ':' + this.clientSecret)
-      })
-    };
-
-    console.log(httpOptions);
-    const params = new HttpParams();
-    params.set('grant_type', 'client_credentials');
-
-    this.http.post('https://accounts.spotify.com/api/token', null, httpOptions).subscribe(
-      result => console.log(result)
-    );
+  async getAuth(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Basic ' + btoa(this.clientId + ':' + this.clientSecret)
+        })
+      };
+  
+      const params = new HttpParams().set('grant_type', 'client_credentials');
+      this.authToken = await this.http.post('https://accounts.spotify.com/api/token', params.toString(), httpOptions).toPromise();
+      resolve(this.authToken);
+    })
   }
 
   async getPlaylist(id: string) {
-    let headers =  new Headers();
-    headers.append('Authorization', 'Bearer ' + this.authToken);
+    const requestOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.authToken.access_token
+      })
+    }
 
     const playlistUrl = 'https://api.spotify.com/v1/playlists/' + id + '/tracks';
 
-    const result = await this.http.post(playlistUrl, { headers : headers });
+    const result = await this.http.get(playlistUrl, requestOptions).toPromise();
 
     console.log(result);
-
   }
 }
