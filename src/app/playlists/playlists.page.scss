@@ -16,5 +16,24 @@
 }
 
 #menu {
-    margin-top: 5px;
+    margin-top: -10px;
+}
+
+#playlist-list {
+    background-color: rgba(39, 39, 39, 0.116);
+}
+
+#playlist-list-item {
+    --background: rgba(39, 39, 39, 0.116);
+}
+
+#playlist-title {
+    color: white;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+#playlist-tracks {
+    color: white;
+    font-weight: 400;
 }

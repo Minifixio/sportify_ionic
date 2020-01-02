@@ -35,13 +35,13 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    let selectedDevice = this.bleSerive.getSelectedDevice();
-    if(selectedDevice) {
+    const selectedDevice = this.bleSerive.getSelectedDevice();
+    if (selectedDevice) {
       selectedDevice.subscribe(
         data => this.bpmGauge.gaugeValue = this.bytesToString(data)
       );
     }
-    this.bpmGauge.gaugeSize = this.platform.width();
+    this.bpmGauge.gaugeSize = this.platform.width() - 50;
   }
 
   bytesToString(buffer): number {

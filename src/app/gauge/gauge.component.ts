@@ -12,7 +12,7 @@ export class GaugeComponent implements OnInit {
   gaugeLabel = 'BPM';
   gaugeThick = '20';
   gaugeCap = 'round';
-  gaugeSize = 360;
+  gaugeSize = 300;
   gaugeForegroundColor = 'rgb(30, 215, 96)';
   gaugeBackgroundColor = 'rgb(90, 90, 90)';
 

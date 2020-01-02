@@ -1,24 +1,35 @@
 <ion-content id='dark-page'>
-    <ion-card id="bleCard">
-      <ion-card-header>
-          <ion-card-title>Appareils disponibles :</ion-card-title>
-      </ion-card-header>
+  <ion-grid id="menu">
+    <ion-row>
+      <ion-col size="4">
+        <ion-title (click)="goToPlaylists()" size="large" id="menu-playlist" color="medium">Playlist</ion-title>               
+      </ion-col>
+      <ion-col>
+        <ion-title size="large" id="menu-connect" color="light">Connect</ion-title>               
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-      <ion-spinner *ngIf="loading" name="crescent" id="loadingSpinner"></ion-spinner>
+  <ion-card id="bleCard">
+    <ion-card-header>
+        <ion-card-title>Appareils disponibles :</ion-card-title>
+    </ion-card-header>
 
-      <ion-item *ngFor="let device of deviceList | async" button="true" (click)="connect(device.id)">
-        <ion-icon name="wifi" slot="start"></ion-icon>
-        <ion-label>{{device.name}} <em>{{device.id}}</em></ion-label>
-      </ion-item>
+    <ion-spinner *ngIf="loading" name="crescent" id="loadingSpinner"></ion-spinner>
 
-      <ion-item *ngIf="empty">
-        <ion-icon name="close-circle" slot="start"></ion-icon>
-        <ion-label>Aucun appareil trouvé</ion-label>
-      </ion-item>
-    
-      <ion-button shape="round" id="refreshButton" (click)="refreshList()" expand="block">Rafraichir <ion-icon name="refresh-circle"></ion-icon></ion-button>
+    <ion-item *ngFor="let device of deviceList | async" button="true" (click)="connect(device.id)">
+      <ion-icon name="wifi" slot="start"></ion-icon>
+      <ion-label>{{device.name}} <em>{{device.id}}</em></ion-label>
+    </ion-item>
 
-      <ion-button shape="round" id="refreshButton" (click)="test()" [routerLink]="['/home']" expand="block">Test</ion-button>
+    <ion-item *ngIf="empty">
+      <ion-icon name="close-circle" slot="start"></ion-icon>
+      <ion-label>Aucun appareil trouvé</ion-label>
+    </ion-item>
+  
+    <ion-button shape="round" id="refreshButton" (click)="refreshList()" expand="block">Rafraichir <ion-icon name="refresh-circle"></ion-icon></ion-button>
 
+    <ion-button shape="round" id="refreshButton" (click)="test()" [routerLink]="['/home']" expand="block">Test</ion-button>
   </ion-card>
+
 </ion-content>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BluetoothService } from '../services/bluetooth.service';
 import { Events, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { SpotifyApiService } from '../services/spotify-api.service';
 
 @Component({
   selector: 'app-bluetooth-list',
@@ -17,13 +18,14 @@ export class BluetoothListPage implements OnInit {
 
   constructor(
     private bleService: BluetoothService,
-    private events: Events,
+    private spotifyApi: SpotifyApiService,
     private navCtrl: NavController
   ) { }
 
   ngOnInit() {
-    if(window.cordova) {
+    if (window.cordova) {
       this.refreshList();
+      this.spotifyApi.initConnect();
     }
   }
 
@@ -43,7 +45,6 @@ export class BluetoothListPage implements OnInit {
   async connect(id) {
     await this.bleService.connect(id).subscribe(
       succes => {
-        this.events.publish('device:connected', this.bleService.subscribeToData(id));
         this.navCtrl.navigateForward('/home');
       }
     );
@@ -51,6 +52,9 @@ export class BluetoothListPage implements OnInit {
 
   test() {
     console.log('Bluetoothlsit-page: TEST');
-    this.events.publish('device:connected', new Observable());
+  }
+
+  goToPlaylists() {
+    this.navCtrl.navigateBack('/playlists', {animated: false});
   }
 }
