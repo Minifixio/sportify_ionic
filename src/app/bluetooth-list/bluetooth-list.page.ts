@@ -42,16 +42,17 @@ export class BluetoothListPage implements OnInit {
     });
   }
 
-  async connect(id) {
-    await this.bleService.connect(id).subscribe(
-      succes => {
+  connect(id) {
+    this.bleService.connect(id).then(() => {
         this.navCtrl.navigateForward('/home');
       }
     );
   }
 
-  test() {
+  async test() {
     console.log('Bluetoothlsit-page: TEST');
+    await this.connect('FE:DC:89:20:7B:74')
+    this.navCtrl.navigateForward('/home');
   }
 
   goToPlaylists() {

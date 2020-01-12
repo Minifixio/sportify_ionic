@@ -11,7 +11,7 @@
   </ion-grid>
   <ion-spinner *ngIf="!playlists" name="crescent"></ion-spinner>
   <ion-list id="playlist-list">
-    <ion-item id="playlist-list-item" *ngFor="let playlist of playlists | async">
+    <ion-item (click)="presentPlaylistSelection(playlist.name, playlist.id)" id="playlist-list-item" *ngFor="let playlist of playlists | async">
       <ion-thumbnail slot="start">
         <img src={{playlist.images[0].url}}>
       </ion-thumbnail>

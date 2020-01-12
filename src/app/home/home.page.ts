@@ -1,11 +1,12 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { SpotifyApiService } from '../services/spotify-api.service';
 import { GaugeComponent } from '../gauge/gauge.component';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Events, NavController } from '@ionic/angular';
 import { SpotifyComponent } from '../spotify/spotify.component';
 import { Platform } from '@ionic/angular';
 import { BluetoothService } from '../services/bluetooth.service';
+import { Router } from '@angular/router';
 
 declare var cordova;
 
@@ -14,7 +15,7 @@ declare var cordova;
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
 
   @ViewChild('bpmGauge', {static: true})
   bpmGauge: GaugeComponent;
@@ -22,43 +23,45 @@ export class HomePage implements OnInit {
   @ViewChild('spotifyPlayer', {static: true})
   spotifyPlayer: SpotifyComponent;
 
+  bpmObserver: Subscription;
+
+  lastBpm: number;
+
   constructor(
-    private spotifyApi: SpotifyApiService,
-    private bleSerive: BluetoothService,
-    private events: Events,
+    private bleService: BluetoothService,
     private navCtrl: NavController,
     private platform: Platform) {
-      this.events.subscribe('device:connected', result => {
-        console.log('Event: Device connected');
-        this.subscribeToData(result);
-      });
   }
 
   ngOnInit() {
-    const selectedDevice = this.bleSerive.getSelectedDevice();
-    if (selectedDevice) {
-      selectedDevice.subscribe(
-        data => this.bpmGauge.gaugeValue = this.bytesToString(data)
-      );
+    console.log('ngOnInit HomePage');
+    if (this.bleService.selectedDevice) {
+      console.log('Device connected, starting bpm watch');
+      this.bpmObserver = this.bleService.newBpmValue.subscribe(bpmValue => {
+        console.log('Home new BPM', bpmValue);
+        this.checkBpm(bpmValue);
+      });
     }
     this.bpmGauge.gaugeSize = this.platform.width() - 50;
+  }
+
+  ngOnDestroy() {
+    this.bpmObserver.unsubscribe();
   }
 
   bytesToString(buffer): number {
     return Number(String.fromCharCode.apply(null, new Uint8Array(buffer)));
   }
 
-  subscribeToData(data) {
-    this.bpmGauge.gaugeValue = 20;
-
-    data.subscribe(
-      buffer => {
-        console.log(this.bytesToString(buffer));
-        this.bpmGauge.gaugeValue = this.bytesToString(buffer);
-    });
-  }
-
   goToPlaylists() {
     this.navCtrl.navigateBack('/playlists', {animated: false});
+  }
+
+  checkBpm(bpm) {
+    console.log('Update : ' + bpm);
+    this.bpmGauge.updateGauge(bpm);
+    if (Math.abs(this.lastBpm - bpm) < 30) {
+      this.lastBpm = bpm;
+    }
   }
 }

@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { AlertController } from '@ionic/angular';
 import { BLE } from '@ionic-native/ble/ngx';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { timer } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +18,18 @@ export class BluetoothService {
   };
 
   selectedDevice: Observable<any>;
+  total: number;
+  count: number;
+
+  newBpmValue: EventEmitter<number> = new EventEmitter();
 
   constructor(
     private bleSerial: BluetoothSerial,
     private alertController: AlertController,
     private bleCentral: BLE
-  ) { }
+  ) {
+    console.log('Build BluetoothService');
+  }
 
   async scanDevices(): Promise<Array<object>> {
     console.log('Scan devices !');
@@ -46,12 +54,24 @@ export class BluetoothService {
     });
   }
 
-  connect(id): Observable<any> {
-    return this.bleCentral.connect(id);
+  connect(id): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      this.bleCentral.connect(id).subscribe(
+        data => {
+          console.log(data);
+          this.subscribeToData(id);
+          resolve(this.bleCentral.connect(id));
+        }
+      );
+    });
   }
 
   subscribeToData(id) {
     this.selectedDevice = this.bleCentral.startNotification(id, this.bluefruit.serviceUUID, this.bluefruit.rxCharacteristic);
+    this.selectedDevice.subscribe( buffer => {
+      console.log ('bleService', buffer);
+      this.newBpmValue.emit(this.bytesToString(buffer));
+    });
   }
 
   checkConnection(id): Promise<any> {
@@ -75,7 +95,19 @@ export class BluetoothService {
     await alert.present();
   }
 
-  getSelectedDevice() {
-    return this.selectedDevice;
+  startRecord() {
+    this.total = 0;
+    this.count = 0;
+    const timer$ = timer(60000);
+    this.selectedDevice.pipe(takeUntil(timer$)).subscribe(
+      data => {
+        this.total = this.total + this.bytesToString(data);
+        this.count = this.count + 1;
+      }
+    );
+  }
+
+  bytesToString(buffer): number {
+    return Number(String.fromCharCode.apply(null, new Uint8Array(buffer)));
   }
 }

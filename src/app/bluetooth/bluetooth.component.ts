@@ -40,7 +40,7 @@ export class BluetoothComponent implements OnInit {
   }
 
   async connect(id) {
-    await this.bleService.connect(id).subscribe(
+    await this.bleService.connect(id).then(
       succes => this.events.publish('device:connected', this.bleService.subscribeToData(id))
     );
   }

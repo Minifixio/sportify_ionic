@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { PreviousRouteService } from '../services/previous-route.service';
 import { SpotifyApiService } from '../services/spotify-api.service';
@@ -17,7 +17,7 @@ export class PlaylistsPage implements OnInit {
 
   constructor(
     private navCtrl: NavController,
-    private router: Router,
+    public alertController: AlertController,
     private spotifyApi: SpotifyApiService,
     private previousRouteService: PreviousRouteService
   ) { }
@@ -48,4 +48,29 @@ export class PlaylistsPage implements OnInit {
     console.log(this.previousRouteService.getPreviousUrl());
     this.navCtrl.back({animated: false});
   }
+
+  selectPlaylist(id: string) {
+    this.spotifyApi.sortTracks(id);
+  }
+
+  async presentPlaylistSelection(name: string, id: string) {
+    const alert = await this.alertController.create({
+      header: 'Choix de playlist',
+      message: 'Voulez vous sélectionner la playlist : ' + name + ' ?',
+      buttons: [
+        {
+          text: 'Oui',
+          handler: () => {
+            this.selectPlaylist(id);
+          }
+        }, {
+          text: 'Annuler',
+          role: 'cancel',
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
 }

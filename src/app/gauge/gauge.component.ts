@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-gauge',
@@ -16,8 +16,13 @@ export class GaugeComponent implements OnInit {
   gaugeForegroundColor = 'rgb(30, 215, 96)';
   gaugeBackgroundColor = 'rgb(90, 90, 90)';
 
-  constructor() { }
+  constructor(
+    private ref: ChangeDetectorRef) { }
 
   ngOnInit() {}
 
+  updateGauge(value) {
+    this.gaugeValue = value;
+    this.ref.detectChanges();
+  }
 }
