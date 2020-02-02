@@ -2,15 +2,14 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'bluetooth-list', pathMatch: 'full' },
-  { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},
+  { path: '', redirectTo: 'connection', pathMatch: 'full' },
   {
-    path: 'bluetooth-list',
-    loadChildren: () => import('./bluetooth-list/bluetooth-list.module').then( m => m.BluetoothListPageModule)
+    path: 'activity',
+    loadChildren: () => import('./pages/activity/activity.module').then( m => m.ActivityPageModule)
   },
   {
-    path: 'playlists',
-    loadChildren: () => import('./playlists/playlists.module').then( m => m.PlaylistsPageModule)
+    path: 'connection',
+    loadChildren: () => import('./pages/connection/connection.module').then( m => m.ConnectionPageModule)
   },
 ];
 

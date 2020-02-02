@@ -30,3 +30,4 @@ npm-debug.log*
 /plugins
 /www
 /src/app/services/constants.ts
+/_old

@@ -1,0 +1,21 @@
+<ion-content id='dark-page'>
+  <ion-grid id="menu">
+    <ion-row>
+      <ion-col size="4">
+        <ion-title (click)="changeView()" size="large" id="menu-playlist" [color]="showBluetoothList?'medium': 'light'">Playlist</ion-title>               
+      </ion-col>
+      <ion-col>
+        <ion-title (click)="changeView()" size="large" id="menu-connect" [color]="showBluetoothList?'light': 'medium'">Connect</ion-title>               
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div [hidden]="!showBluetoothList" id="bluetoothList">
+    <app-bluetooth-list #bluetoothList></app-bluetooth-list>
+  </div>
+
+  <div *ngIf="!showBluetoothList" id="playlistsList">
+    <app-playlists-list #playlistsList></app-playlists-list>
+  </div>
+
+</ion-content>

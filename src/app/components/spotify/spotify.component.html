@@ -1,0 +1,44 @@
+<div id="player">
+  <ion-content id="main">
+    <div class="player-infos">
+      <ion-text color="light">
+        <h1 id="player-title">{{ currentTrack?.name || "No track"}}</h1>
+      </ion-text>
+
+      <ion-text id="player-artist" color="light">
+        {{ currentTrack?.artists[0].name || "No track"}}
+      </ion-text>
+    </div>
+
+    <div id="player-range">
+      <ion-range [value]="positionNumber" min="0" [max]="currentTrack?.duration_ms" step="100" ticks="false" color="light">
+        <ion-label slot="start" color="light">{{positionString}}</ion-label>
+        <ion-label slot="end" color="light">{{endTrack}}</ion-label>
+      </ion-range>
+    </div>
+
+    <div class="player-buttons" id="fab-play">
+      <ion-fab>
+        <ion-fab-button (click)="player()" shape="round" color="light"><ion-icon color="dark" [name]="playerPaused?'play': 'pause'"></ion-icon></ion-fab-button>
+      </ion-fab>
+    </div>
+
+    <div class="player-buttons" id="fab-left">
+      <ion-fab>
+        <ion-fab-button size="small" shape="round" color="light"><ion-icon color="dark" name="skip-backward"></ion-icon></ion-fab-button>
+      </ion-fab>
+    </div>
+
+    <div class="player-buttons" id="fab-right">
+      <ion-fab>
+        <ion-fab-button (click)="skip()" size="small" shape="round" color="light"><ion-icon color="dark" name="skip-forward"></ion-icon></ion-fab-button>
+      </ion-fab>
+    </div>
+
+    <ion-icon id="random-button" size="medium" color="light" name="shuffle"></ion-icon>
+    <ion-icon id="list-button" size="medium" color="light" name="list"></ion-icon>
+
+  </ion-content>
+
+
+</div>

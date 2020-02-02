@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { BLE } from '@ionic-native/ble/ngx';
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

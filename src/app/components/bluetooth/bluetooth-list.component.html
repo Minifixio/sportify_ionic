@@ -1,0 +1,23 @@
+<ion-card color="dark" id="main-card">
+  <ion-card-header>
+      <ion-card-title id="card-title">Appareils disponibles :</ion-card-title>
+  </ion-card-header>
+
+  <ion-spinner *ngIf="loading" name="crescent" id="loadingSpinner"></ion-spinner>
+
+  <ion-item color="medium" id="card-list-item" *ngFor="let device of deviceList | async" button="true" (click)="connect(device.id)">
+    <ion-icon name="wifi" slot="start"></ion-icon>
+    <ion-label>{{device.name}} <em>{{device.id}}</em></ion-label>
+  </ion-item>
+
+  <ion-item color="danger" id="card-list-item" *ngIf="empty">
+    <ion-icon  name="close-circle" slot="start"></ion-icon>
+    <ion-label >Aucun appareil trouvé</ion-label>
+  </ion-item>
+
+  <div id="refresh-button-div">
+    <ion-button fill="outline" id="refresh-button" (click)="refreshList()" size="default">Rafraichir <ion-icon name="refresh-circle"></ion-icon></ion-button>
+    <ion-button fill="outline" id="refresh-button" (click)="test()" size="default">Test</ion-button>
+  </div>
+
+</ion-card>

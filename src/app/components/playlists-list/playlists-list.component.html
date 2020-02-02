@@ -1,0 +1,15 @@
+<ion-content id='dark-page'>
+
+  <ion-spinner *ngIf="!playlists" name="crescent"></ion-spinner>
+  <ion-list id="playlist-list">
+    <ion-item (click)="presentPlaylistSelection(playlist.name, playlist.id)" id="playlist-list-item" *ngFor="let playlist of playlists | async">
+      <ion-thumbnail slot="start">
+        <img src={{playlist.images[0].url}}>
+      </ion-thumbnail>
+      <ion-label>
+        <h2 id="playlist-title">{{playlist.name}}</h2>
+        <h3 id="playlist-tracks">Tracks: {{playlist.tracks.total}}</h3>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

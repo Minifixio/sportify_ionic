@@ -1,0 +1,30 @@
+#dark-page{
+    --background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(88,88,93,1) 220%);
+}
+
+#menu-connect {
+    font-size: 30px;
+    padding-left: 0px;
+    font-weight: bolder;
+}
+
+#menu-playlist {
+    font-size: 30px;
+    padding-right: 0px;
+    padding-left: 2px;
+    font-weight: bolder;
+}
+
+#menu {
+    margin-top: -10px;
+}
+
+#bluetoothList {
+    width: 100%;
+    height: 100%;
+}
+
+#playlistsList {
+    width: 100%;
+    height: 100%;
+}

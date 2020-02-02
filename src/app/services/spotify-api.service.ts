@@ -3,6 +3,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Constants } from '../services/constants';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
+import { Track } from './model/track';
 import { BluetoothService } from './bluetooth.service';
 declare var cordova;
 
@@ -27,16 +28,6 @@ interface Playlists {
   }];
 }
 
-interface Track {
-  id: number;
-  name: string;
-  artists: Array<string>;
-  uri: string;
-  duration_ms: number;
-  tempo: number;
-  imgUrl: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -53,6 +44,7 @@ export class SpotifyApiService {
   currentTrack: Track;
 
   match = false;
+  endTrack = false;
   maxBpm = 220;
   minBpm = 50;
 
@@ -109,6 +101,8 @@ export class SpotifyApiService {
   }
 
   async sortTracks(id: string) {
+
+    this.tracks = [];
 
     const requestOptions = {
       headers: new HttpHeaders({
@@ -189,15 +183,18 @@ export class SpotifyApiService {
   async checkPosition() {
     const position = await cordova.plugins.spotify.getPosition();
 
-    if ((this.currentTrack.duration_ms - position) < 60000 && this.match === false) {
+    if ((this.currentTrack.duration_ms - position) < 10000 && this.match === false) {
       console.log('Spotify API : Starting record :');
       this.match = true;
+      this.bleService.startRecord();
     }
 
-    if ((this.currentTrack.duration_ms - position) < 500) {
+    if ((this.currentTrack.duration_ms - position) < 500 && this.endTrack === false) {
+      this.endTrack = true;
       const mean = this.bleService.total / this.bleService.count;
-      this.matchTrack(mean);
       console.log('Spotify API : Track Ended : ' + this.currentTrack.name);
+      console.log('Spotify API : Track Ended : total / count : ' + this.bleService.total + ' ' + this.bleService.count);
+      this.matchTrack(mean);
     }
   }
 
@@ -207,12 +204,12 @@ export class SpotifyApiService {
     console.log('Spotify API : the range on tracks[] is : ' + range);
     const scope = Math.round(this.tracks.length * range);
     if (scope < 5) {
-      selection = this.tracks.slice(0, scope + 5);
+      selection = this.tracks.slice(0, scope + 4);
     }
     if (scope > this.tracks.length) {
-      selection = this.tracks.slice(scope - 5, this.tracks.length);
+      selection = this.tracks.slice(scope - 4, this.tracks.length);
     } else {
-      selection = this.tracks.slice(scope - 5, scope + 5);
+      selection = this.tracks.slice(scope - 4, scope + 4);
     }
 
     console.log('Spotify API : the selection is : ');
@@ -229,7 +226,10 @@ export class SpotifyApiService {
     console.log('Spotify API : the next track is : ' + nextTrack);
 
     this.currentTrack = nextTrack;
-    this.playTrack(nextTrack.uri);
+    this.playTrack(nextTrack.uri).then(() => {
+      this.match = false;
+      this.endTrack = false;
+    });
   }
 
   resumeTrack(): Promise<number> {

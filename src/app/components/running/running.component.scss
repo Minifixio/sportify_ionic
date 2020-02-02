@@ -1,0 +1,41 @@
+#gaugeDiv {
+    height: auto;
+    width: auto;
+    text-align: center;
+    margin-top: 3%;
+}
+
+#dark-page{
+    --background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgb(58, 58, 58) 220%);
+}
+
+#menu-run {
+    font-size: 30px;
+    padding-left: 0px;
+    font-weight: bolder;
+}
+
+#menu-playlist {
+    font-size: 30px;
+    padding-right: 0px;
+    padding-left: 2px;
+    font-weight: bolder;
+}
+#menu {
+    margin-top: -10px;
+}
+
+#button-stop {
+    --background: rgb(58, 58, 58);
+    align-items: center;
+}
+
+#button-div {
+    margin-top:5px;
+    text-align: center;
+}
+
+#disconnect-button{
+    --color: rgb(30, 215, 96);
+    --border-color: rgb(30, 215, 96);
+}
