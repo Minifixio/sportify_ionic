@@ -62,7 +62,7 @@ export class SpotifyApiService {
         cordova.plugins.spotifyAuth.authorize(this.config).then(
           (accessToken, expiresAt) => {
             this.authToken = accessToken.accessToken;
-            console.log('Got an access token expiring at ' + expiresAt + ' :');
+            console.log('[Spotify API] Got an access token expiring at ' + expiresAt + ' :');
             console.log(accessToken);
             resolve(accessToken);
         });
@@ -136,7 +136,7 @@ export class SpotifyApiService {
       this.tracks.push(track);
     }
     this.tracks.sort((a, b) => (a.tempo - b.tempo));
-    console.log('Spotify API : Tracks sorted array is :');
+    console.log('[Spotify API] Tracks sorted array is :');
     console.log(this.tracks);
   }
 
@@ -146,7 +146,7 @@ export class SpotifyApiService {
         clientId: this.clientId,
         token: this.authToken
       }).then(() => {
-        console.log('Spotify API : Track is playing ');
+        console.log('[Spotify API] Track is playing ');
         console.log(this.currentTrack);
         this.currentTrackPosition = new Observable((observer) => {
           setInterval(() => {
@@ -170,7 +170,7 @@ export class SpotifyApiService {
   playRandomTrack(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.currentTrack = this.tracks[Math.floor(Math.random() * this.tracks.length)];
-      console.log('Spotify API : Random track is ');
+      console.log('[Spotify API] Random track is ');
       console.log(this.currentTrack);
       this.playTrack(this.currentTrack.uri).then(track => {
         resolve(track);
@@ -183,8 +183,8 @@ export class SpotifyApiService {
   async checkPosition() {
     const position = await cordova.plugins.spotify.getPosition();
 
-    if ((this.currentTrack.duration_ms - position) < 10000 && this.match === false) {
-      console.log('Spotify API : Starting record :');
+    if ((this.currentTrack.duration_ms - position) < 60000 && this.match === false) {
+      console.log('[Spotify API] Starting record :');
       this.match = true;
       this.bleService.startRecord();
     }
@@ -192,8 +192,8 @@ export class SpotifyApiService {
     if ((this.currentTrack.duration_ms - position) < 500 && this.endTrack === false) {
       this.endTrack = true;
       const mean = this.bleService.total / this.bleService.count;
-      console.log('Spotify API : Track Ended : ' + this.currentTrack.name);
-      console.log('Spotify API : Track Ended : total / count : ' + this.bleService.total + ' ' + this.bleService.count);
+      console.log('[Spotify API] Track Ended : ' + this.currentTrack.name);
+      console.log('[Spotify API] total / count : ' + this.bleService.total + ' ' + this.bleService.count);
       this.matchTrack(mean);
     }
   }
@@ -201,8 +201,9 @@ export class SpotifyApiService {
   matchTrack(mean) {
     let selection = [];
     const range = mean / (this.maxBpm - this.minBpm);
-    console.log('Spotify API : the range on tracks[] is : ' + range);
+    console.log('[Spotify API] the range on tracks[] is : ' + range);
     const scope = Math.round(this.tracks.length * range);
+
     if (scope < 5) {
       selection = this.tracks.slice(0, scope + 4);
     }
@@ -212,7 +213,7 @@ export class SpotifyApiService {
       selection = this.tracks.slice(scope - 4, scope + 4);
     }
 
-    console.log('Spotify API : the selection is : ');
+    console.log('[Spotify API] the selection is : ');
     console.log(selection);
 
     let nextTrack = selection[Math.floor(Math.random() * selection.length)];
@@ -223,7 +224,7 @@ export class SpotifyApiService {
       }
     }
 
-    console.log('Spotify API : the next track is : ' + nextTrack);
+    console.log('[Spotify API] the next track is : ' + nextTrack);
 
     this.currentTrack = nextTrack;
     this.playTrack(nextTrack.uri).then(() => {
@@ -237,7 +238,7 @@ export class SpotifyApiService {
     return new Promise((resolve, reject) => {
       cordova.plugins.spotify.resume()
       .then(() => {
-          console.log('Spotify API : music is resuming');
+          console.log('[Spotify API] music is resuming');
           resolve(1);
       });
     });
@@ -247,7 +248,7 @@ export class SpotifyApiService {
     return new Promise((resolve, reject) => {
       cordova.plugins.spotify.pause()
       .then(() => {
-          console.log('Spotify API : music is paused');
+          console.log('[Spotify API] music is paused');
           resolve(1);
       });
     });

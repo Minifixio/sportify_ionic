@@ -28,12 +28,10 @@ export class BluetoothService {
     private bleSerial: BluetoothSerial,
     private alertController: AlertController,
     private bleCentral: BLE
-  ) {
-    console.log('Build BluetoothService');
-  }
+  ) {}
 
   async scanDevices(): Promise<Array<object>> {
-    console.log('Scan devices !');
+    console.log('[Ble API] Scan devices !');
     return new Promise(async (resolve, reject) => {
       try {
         await this.bleCentral.isEnabled();
@@ -50,15 +48,19 @@ export class BluetoothService {
         console.log(result);
         resolve(result);
       } catch {
-        reject('No devices found');
+        reject('[Ble API] No devices found');
       }
     });
   }
 
   disconnect() {
-    this.bleCentral.disconnect(this.deviceId).then(() => {
-      console.log('Ble API : Disconnected !');
-     });
+    this.bleSerial.isConnected().then(() => {
+      console.log('[Ble API] Device is already connected !');
+    }, () => {
+      this.bleCentral.disconnect(this.deviceId).then(() => {
+        console.log('[Ble API] Disconnected !');
+       });
+    });
   }
 
   connect(id): Promise<any> {
@@ -80,11 +82,11 @@ export class BluetoothService {
     this.selectedDevice = this.bleCentral.startNotification(id, this.bluefruit.serviceUUID, this.bluefruit.rxCharacteristic);
     this.selectedDevice.subscribe( buffer => {
       if (this.recording === true) {
-        console.log('Ble API : Record data : ' + this.total + ' ' + this.count);
+        console.log('[Ble API] Record data : ' + this.total + ' ' + this.count);
         this.total = this.total + this.bytesToString(buffer);
         this.count = this.count + 1;
       } else {
-        console.log ('Data : ', this.bytesToString(buffer));
+        console.log ('[Ble API] Data : ', this.bytesToString(buffer));
         this.newBpmValue.emit(this.bytesToString(buffer));
       }
     });
@@ -116,17 +118,11 @@ export class BluetoothService {
     this.count = 0;
     this.recording = true;
     const timer$ = timer(10000);
-    console.log('Ble API : Start record data !');
+    console.log('[Ble API] Start record data !');
     await timer$.toPromise();
-    console.log('Ble API : End record data !');
+
+    console.log('[Ble API] End record data !');
     this.recording = false;
-    /**this.newBpmValue.pipe(takeUntil(timer$)).subscribe(
-      data => {
-        console.log('Ble API : Start record data !');
-        this.total = this.total + this.bytesToString(data);
-        this.count = this.count + 1;
-      }
-    );**/
   }
 
   bytesToString(buffer): number {

@@ -30,11 +30,15 @@ export class SpotifyComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    console.log('[Spotify Component] ngOnInit');
     this.currentTrack = this.spotifyApi.currentTrack;
+
+    console.log('[Spotify Component] Current Track: ');
     console.log(this.currentTrack);
+
     this.trackChangeSub = this.spotifyApi.trackChange.subscribe(track => {
-      console.log('SpotifyComponent : Track changed :');
-      console.log(track, this);
+      console.log('[Spotify Component] Track changed :');
+      console.log(track);
       this.currentTrack = track;
       this.endTrack = this.msToTime(track.duration_ms);
       this.currentTrackPositionSub = this.spotifyApi.currentTrackPosition.subscribe(pos => {

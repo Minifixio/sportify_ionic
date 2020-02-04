@@ -1,12 +1,10 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { SpotifyApiService } from '../../services/spotify-api.service';
 import { GaugeComponent } from '../gauge/gauge.component';
 import { Observable, Subscription } from 'rxjs';
 import { NavController } from '@ionic/angular';
 import { SpotifyComponent } from '../spotify/spotify.component';
 import { Platform } from '@ionic/angular';
 import { BluetoothService } from '../../services/bluetooth.service';
-
 declare var cordova;
 
 @Component({
@@ -44,15 +42,13 @@ export class RunningComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.bpmObserver.unsubscribe();
+    if (this.bpmObserver) {
+      this.bpmObserver.unsubscribe();
+    }
   }
 
   bytesToString(buffer): number {
     return Number(String.fromCharCode.apply(null, new Uint8Array(buffer)));
-  }
-
-  goToPlaylists() {
-    this.navCtrl.navigateBack('/playlists', {animated: false});
   }
 
   checkBpm(bpm) {
@@ -64,6 +60,6 @@ export class RunningComponent implements OnInit, OnDestroy {
 
   disconnect() {
     this.bleService.disconnect();
-    this.navCtrl.navigateBack('/bluetooth-list', {animated: false});
+    this.navCtrl.navigateBack('/connection', {animated: false});
   }
 }

@@ -49,9 +49,8 @@ export class BluetoothListComponent implements OnInit {
     );
   }
 
-  async test() {
-    console.log('Bluetoothlsit-page: TEST');
-    await this.connect('FE:DC:89:20:7B:74');
+  async goToActivity() {
+    console.log('[Bluetooth-list Component] Go to activity page !');
     this.navCtrl.navigateForward('/activity');
   }
 

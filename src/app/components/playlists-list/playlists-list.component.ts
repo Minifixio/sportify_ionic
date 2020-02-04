@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController } from '@ionic/angular';
-import { PreviousRouteService } from '../../services/previous-route.service';
+import { AlertController } from '@ionic/angular';
 import { SpotifyApiService } from '../../services/spotify-api.service';
 
 @Component({
@@ -14,32 +13,28 @@ export class PlaylistsListComponent implements OnInit {
   loading: boolean;
 
   constructor(
-    private navCtrl: NavController,
     public alertController: AlertController,
     private spotifyApi: SpotifyApiService,
-    private previousRouteService: PreviousRouteService
   ) { }
 
   ngOnInit() {
-    console.log('ngOnInit : PlaylistsListComponent');
+    console.log('[PlaylistsList Component] ngOnInit');
     if (window.cordova) {
       this.loading = true;
       if (!this.spotifyApi.authToken) {
         this.spotifyApi.initConnect().then(() => {
+          console.log('[PlaylistsList Component] Searching for user playlists');
+          this.playlists = this.spotifyApi.getUserPlaylists();
         });
+      } else {
+        console.log('[PlaylistsList Component] Searching for user playlists');
+        this.playlists = this.spotifyApi.getUserPlaylists();
       }
-      console.log('Searching for user playlists');
-      this.playlists = this.spotifyApi.getUserPlaylists();
     } else {
       this.spotifyApi.getAuth().then(() => {
         this.spotifyApi.getUserPlaylists();
       });
     }
-  }
-
-  goBack() {
-    console.log(this.previousRouteService.getPreviousUrl());
-    this.navCtrl.back({animated: false});
   }
 
   selectPlaylist(id: string) {
