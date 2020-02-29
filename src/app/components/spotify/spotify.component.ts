@@ -56,6 +56,7 @@ export class SpotifyComponent implements OnInit, OnDestroy {
   }
 
   async player() {
+    console.log(this.playerPaused);
     if (Array.isArray(this.spotifyApi.tracks) && this.spotifyApi.tracks.length) {
       if (!this.spotifyApi.currentTrack) {
         await this.spotifyApi.playRandomTrack();
@@ -77,6 +78,7 @@ export class SpotifyComponent implements OnInit, OnDestroy {
   async skip() {
     if (Array.isArray(this.spotifyApi.tracks) && this.spotifyApi.tracks.length) {
       if (!this.spotifyApi.currentTrack) {
+        console.log('skip()');
         await this.spotifyApi.playRandomTrack();
         this.playerPaused = false;
       }

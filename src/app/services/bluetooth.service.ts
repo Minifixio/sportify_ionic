@@ -85,10 +85,11 @@ export class BluetoothService {
         console.log('[Ble API] Record data : ' + this.total + ' ' + this.count);
         this.total = this.total + this.bytesToString(buffer);
         this.count = this.count + 1;
-      } else {
-        console.log ('[Ble API] Data : ', this.bytesToString(buffer));
-        this.newBpmValue.emit(this.bytesToString(buffer));
       }
+
+      console.log ('[Ble API] Data : ', this.bytesToString(buffer));
+      this.newBpmValue.emit(this.bytesToString(buffer));
+
     });
   }
 
@@ -113,11 +114,11 @@ export class BluetoothService {
     await alert.present();
   }
 
-  async startRecord() {
+  async startRecord(recordTime) {
     this.total = 0;
     this.count = 0;
     this.recording = true;
-    const timer$ = timer(10000);
+    const timer$ = timer(recordTime);
     console.log('[Ble API] Start record data !');
     await timer$.toPromise();
 

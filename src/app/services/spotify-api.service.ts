@@ -182,11 +182,10 @@ export class SpotifyApiService {
 
   async checkPosition() {
     const position = await cordova.plugins.spotify.getPosition();
-
     if ((this.currentTrack.duration_ms - position) < 60000 && this.match === false) {
       console.log('[Spotify API] Starting record :');
       this.match = true;
-      this.bleService.startRecord();
+      this.bleService.startRecord(this.currentTrack.duration_ms - position);
     }
 
     if ((this.currentTrack.duration_ms - position) < 500 && this.endTrack === false) {
