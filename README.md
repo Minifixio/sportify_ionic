@@ -45,3 +45,9 @@ See : https://github.com/Minifixio/sportify_arduino to download the project and 
 <br>
 
 Any suggestions are highly appreciated :) 
+
+<br>
+
+## Some pictures of the app
+
+<img src="https://i.imgur.com/u2MsIUJ.jpg" width="250"> <img src="https://i.imgur.com/KrzO0qK.jpg" width="250"> <img src="https://i.imgur.com/3oRcYrb.jpg" width="250">
